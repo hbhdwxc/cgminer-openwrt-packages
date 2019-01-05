@@ -47,8 +47,8 @@ ifeq ($(CONFIG_CGMINER_AVALONLC3),y)
 	PKG_REV:=avalonlc3
 endif
 ifeq ($(CONFIG_CGMINER_AVALON_KX),y)
-	PKG_VERSION:=git-$(shell git ls-remote https://github.com/Canaan-Creative/cgminer avalon8_lp | cut -f1 | cut -c1-7)
-	PKG_REV:=avalon8_lp
+	PKG_VERSION:=git-$(shell git ls-remote https://github.com/hbhdwxc/cgminer avalon_kx | cut -f1 | cut -c1-7)
+	PKG_REV:=avalon_kx
 endif
 
 PKG_RELEASE:=1
@@ -82,7 +82,7 @@ ifeq ($(CONFIG_CGMINER_AVALONLC3),y)
 	PKG_SOURCE_URL:=git://github.com/Canaan-Creative/cgminer.git
 endif
 ifeq ($(CONFIG_CGMINER_AVALON_KX),y)
-	PKG_SOURCE_URL:=git://github.com/Canaan-Creative/cgminer.git
+	PKG_SOURCE_URL:=git://github.com/hbhdwxc/cgminer.git
 endif
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
