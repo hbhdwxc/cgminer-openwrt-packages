@@ -233,6 +233,7 @@ ifeq ($(CONFIG_CGMINER_AVALONLC3),y)
 endif
 ifeq ($(CONFIG_CGMINER_AVALON_KX),y)
 	$(INSTALL_BIN) $(FILES_DIR)/cgminer-avalon8-monitor        $(1)/usr/bin/cgminer-monitor
+	$(INSTALL_BIN) $(FILES_DIR)/cgminer-avalon_kx-collect      $(1)/usr/bin/cgminer-collect
 	$(INSTALL_BIN) $(FILES_DIR)/cgminer.avalon8.init           $(1)/etc/init.d/cgminer
 	$(CP)          $(FILES_DIR)/cgminer.avalon8_lp.config      $(1)/etc/config/cgminer
 	$(INSTALL_BIN)          $(FILES_DIR)/mm-avalon8-upgrade             $(1)/usr/bin/mmupgrade

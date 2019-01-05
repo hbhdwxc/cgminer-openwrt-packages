@@ -1,0 +1,38 @@
+#!/bin/sh
+# This file is for cron job
+
+TIME=$(date +%s)
+IP=`ifconfig | grep Bcast: | sed 's/^.*inet addr:\s*\([0-9\.]*\)\s*Bcast.*$/\1/'`
+VERSION=1
+SRV_ADDR=http://a.canaan-creative.com
+ORG=31
+
+DEBUG=`cgminer-api debug | grep "\[Debug\] => true"`
+if [ -z "$DEBUG" ]; then
+    cgminer-api "debug|D"
+fi
+
+SUMMARY=`cgminer-api '{"command":"summary"}' | sed "s/Reply was '\(.*\)'/\1/" | sed -n '1p'`
+EDEVS=`cgminer-api '{"command":"edevs"}' | sed "s/Reply was '\(.*\)'/\1/" | sed -n '1p'`
+ESTATS=`cgminer-api '{"command":"estats"}' | sed "s/Reply was '\(.*\)'/\1/" | sed -n '1p'`
+POOLS=`cgminer-api '{"command":"pools"}' | sed "s/Reply was '\(.*\)'/\1/" | sed -n '1p'`
+
+SEC=`echo $IP | sed 's/^.*\.[0-9]\?\([0-9]\{1,2\}\)$/\1/'`
+sleep $SEC
+
+RES=`curl -X POST -H "Content-Type: application/json" -d "{\"summary\":$SUMMARY, \"edevs\": $EDEVS, \"estats\": $ESTATS, \"pools\": $POOLS}" "$SRV_ADDR/api/log/rpi_data?ip=$IP&timestamp=$TIME&org=$ORG&ver=$VERSION"`
+NEW_TIME=`echo $RES | sed 's/interval=\([0-9]\+\)/\1/'`
+if [ -n "$NEW_TIME" ]; then
+    CRON_TIME=`crontab -l|grep 'cgminer-collect'|sed 's/\*\/\([0-9]\+\) .*cgminer-collect/\1/'`
+    echo $CRON_TIME
+    if [ "$NEW_TIME" != "$CRON_TIME" ]; then
+        crontab -l | sed '/cgminer-collect/d' > /tmp/mycron
+        echo "*/$NEW_TIME *  *   *   *     /usr/bin/cgminer-collect" >> /tmp/mycron
+        crontab /tmp/mycron
+        rm /tmp/mycron
+    fi
+fi
+
+if [ -z "$DEBUG" ]; then
+    cgminer-api "debug|D"
+fi

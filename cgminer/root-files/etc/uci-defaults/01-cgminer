@@ -13,6 +13,11 @@ echo -e '\toption init cgminer' >> /etc/config/ucitrack
 
 # Setup the cron job
 echo "*/3 *  *   *   *     /usr/bin/cgminer-monitor" | crontab -
+if [ -f /usr/bin/cgminer-collect ]; then
+    cron_job="*/5 *  *   *   *     /usr/bin/cgminer-collect"
+    ( crontab -l | grep -v "$cron_job"; echo "$cron_job" ) | crontab -
+fi
+
 /etc/init.d/cron enable
 /etc/init.d/cron stop
 /etc/init.d/cron start
