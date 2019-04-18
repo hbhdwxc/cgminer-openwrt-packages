@@ -67,6 +67,8 @@ start() {
 	    POWER_MODE="--avalon8-power-mode 1"
 	elif [ "$_power_mode" == "low" ]; then
 	    POWER_MODE="--avalon8-power-mode 2"
+	elif [ "$_power_mode" == "compatible" ]; then
+	    POWER_MODE="--avalon8-power-mode 3"
 	fi
 
 	AVA8_OPTIONS=" --avalon8-fan $_fan-100 $VOLT_OFFSET"
